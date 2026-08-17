@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="陈老师工作台">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=20260801ar">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon.png?v=20260801ar">
+    <link rel="apple-touch-icon" href="favicon.png?v=20260801ar">
+    <link rel="shortcut icon" href="favicon.svg?v=20260801ar">
+    <link rel="manifest" href="manifest.json?v=20260801ar">
+    <title>陈老师工作台</title>
+    <link rel="stylesheet" href="css/style.css?v=20260801ar">
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 顶部栏 -->
+    <header class="top-bar">
+        <div class="top-bar-left">
+            <h1 class="app-title" id="appTitle" onclick="editAppTitle()" title="点击修改名称">陈老师工作台</h1>
+        </div>
+        <div class="top-bar-right">
+            <span class="current-date" id="currentDate"></span>
+            <div class="income-badge" id="todayIncomeBadge">
+                <span class="badge-label">今日收入</span>
+                <span class="badge-value" id="todayIncomeValue">￥0</span>
+            </div>
+            <div class="skin-selector-wrap">
+                <button class="top-btn" id="skinBtn" onclick="toggleSkinMenu()">🎨</button>
+                <div class="skin-dropdown" id="skinDropdown" style="display:none;">
+                    <div class="skin-option" data-skin="macaron" onclick="changeSkin('macaron')">
+                        <span class="skin-preview macaron-preview"></span>马卡龙
+                    </div>
+                    <div class="skin-option" data-skin="morandi" onclick="changeSkin('morandi')">
+                        <span class="skin-preview morandi-preview"></span>莫兰迪
+                    </div>
+                    <div class="skin-option" data-skin="cream" onclick="changeSkin('cream')">
+                        <span class="skin-preview cream-preview"></span>奶油
+                    </div>
+                    <div class="skin-option" data-skin="salt" onclick="changeSkin('salt')">
+                        <span class="skin-preview salt-preview"></span>盐系
+                    </div>
+                    <div class="skin-option" data-skin="memphis" onclick="changeSkin('memphis')">
+                        <span class="skin-preview memphis-preview"></span>孟菲斯
+                    </div>
+                    <div class="skin-option" data-skin="masculine" onclick="changeSkin('masculine')">
+                        <span class="skin-preview masculine-preview"></span>男色系
+                    </div>
+                    <div class="skin-option" data-skin="girly" onclick="changeSkin('girly')">
+                        <span class="skin-preview girly-preview"></span>女生系
+                    </div>
+                    <div class="skin-option" data-skin="fresh" onclick="changeSkin('fresh')">
+                        <span class="skin-preview fresh-preview"></span>清新系
+                    </div>
+                    <div class="skin-option" data-skin="gold" onclick="changeSkin('gold')">
+                        <span class="skin-preview gold-preview"></span>土豪金
+                    </div>
+                    <div class="skin-option" data-skin="earth" onclick="changeSkin('earth')">
+                        <span class="skin-preview earth-preview"></span>暗黑土黄
+                    </div>
+                </div>
+            </div>
+            <button class="top-btn" id="refreshBtn" onclick="refreshApp()" title="刷新并同步云端">🔁</button>
+            <button class="top-btn" id="syncBtn" onclick="openSyncModal()" title="云同步"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg></button>
+            <button class="top-btn theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换浅色/深色皮肤">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-body">
+        <!-- 侧边栏导航（所有设备统一左侧） -->
+        <nav class="sidebar" id="sidebar">
+            <a class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">
+                <span class="nav-icon">🏠</span><span class="nav-text">总览</span>
+            </a>
+            <a class="nav-item" data-tab="inspiration" onclick="switchTab('inspiration')">
+                <span class="nav-icon">💡</span><span class="nav-text">灵感记录</span>
+            </a>
+            <a class="nav-item" data-tab="plan" onclick="switchTab('plan')">
+                <span class="nav-icon">📋</span><span class="nav-text">每日计划</span>
+            </a>
+            <a class="nav-item" data-tab="finance" onclick="switchTab('finance')">
+                <span class="nav-icon">💰</span><span class="nav-text">收支记录</span>
+            </a>
+            <a class="nav-item" data-tab="diary" onclick="switchTab('diary')">
+                <span class="nav-icon">💭</span><span class="nav-text">每日心得</span>
+            </a>
+            <a class="nav-item" data-tab="strategy" onclick="switchTab('strategy')">
+                <span class="nav-icon">🎯</span><span class="nav-text">年度战略</span>
+            </a>
+            <a class="nav-item" data-tab="wish" onclick="switchTab('wish')">
+                <span class="nav-icon">⭐</span><span class="nav-text">心愿栏</span>
+            </a>
+            <a class="nav-item" data-tab="recommend" onclick="switchTab('recommend')">
+                <span class="nav-icon">🔥</span><span class="nav-text">创作灵感</span>
+            </a>
+            <div class="sidebar-clock" id="sidebarClock"></div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content" id="mainContent">
+            <!-- ====== 总览页 ====== -->
+            <div class="tab-page active module-dashboard" id="tab-dashboard">
+                <div class="strategy-top-display" id="strategyTopDisplay"></div>
+                <div class="dash-inspiration-box" id="dashInspirationBox" onclick="switchTab('inspiration')"></div>
+                <div class="dashboard-grid">
+                    <div class="dash-card plan-card" onclick="switchTab('plan')">
+                        <div class="dash-card-header"><span class="dash-title" id="dashPlanTitle">📋 今日计划</span></div>
+                        <div class="dash-card-body">
+                            <div class="plan-progress" id="dashPlanProgress"></div>
+                            <div class="plan-list-mini" id="dashPlanList"></div>
+                            <div class="plan-list-mini" id="dashPlanDone" style="display:none;"></div>
+                        </div>
+                    </div>
+                    <div class="dash-card income-card" onclick="switchTab('finance')">
+                        <div class="dash-card-header"><span class="dash-icon">💰</span><span class="dash-title" id="dashIncomeTitle">今日收支</span></div>
+                        <div class="dash-card-body">
+                            <div class="dash-goal-progress" id="dashIncomeGoalProgress"></div>
+                            <div class="dash-stat"><span class="stat-label">收入</span><span class="stat-value income-color" id="dashTodayIncome">￥0</span></div>
+                            <div class="dash-stat"><span class="stat-label">支出</span><span class="stat-value expense-color" id="dashTodayExpense">￥0</span></div>
+                            <div class="dash-stat"><span class="stat-label">净额</span><span class="stat-value" id="dashTodayNet">￥0</span></div>
+                        </div>
+                    </div>
+                    <div class="dash-card wish-card" onclick="switchTab('wish')">
+                        <div class="dash-card-header"><span class="dash-icon">⭐</span><span class="dash-title">心愿进度</span></div>
+                        <div class="dash-card-body" id="dashWishPreview"></div>
+                    </div>
+                    <div class="dash-card recommend-card" onclick="switchTab('recommend')">
+                        <div class="dash-card-header"><span class="dash-icon">🔥</span><span class="dash-title">创作灵感</span></div>
+                        <div class="dash-card-body"><div class="recommend-mini" id="dashRecommendList"></div></div>
+                    </div>
+                    <div class="dash-card timer-card" id="dashTimerCard">
+                        <div class="dash-card-header"><span class="dash-icon">⏱️</span><span class="dash-title">专注计时</span></div>
+                        <div class="dash-card-body">
+                            <div class="timer-display" id="timerDisplay">00:00</div>
+                            <div class="timer-mode-tabs">
+                                <button class="timer-mode-btn active" data-mode="countdown" onclick="setTimerMode('countdown')">倒计时</button>
+                                <button class="timer-mode-btn" data-mode="stopwatch" onclick="setTimerMode('stopwatch')">正计时</button>
+                            </div>
+                            <div class="timer-presets" id="timerPresets">
+                                <button class="timer-preset-btn" onclick="setTimerPreset(10)">10分钟</button>
+                                <button class="timer-preset-btn" onclick="setTimerPreset(25)">25分钟</button>
+                                <button class="timer-preset-btn" onclick="setTimerPreset(30)">30分钟</button>
+                                <button class="timer-preset-btn" onclick="setTimerPreset(60)">1小时</button>
+                            </div>
+                            <div class="timer-custom" id="timerCustom">
+                                <input type="number" id="timerCustomInput" class="timer-custom-input" placeholder="自定义分钟" min="1" max="999" onkeypress="if(event.key==='Enter') setTimerCustom()">
+                                <button class="timer-preset-btn" onclick="setTimerCustom()">设置</button>
+                            </div>
+                            <div class="timer-controls">
+                                <button class="timer-btn timer-start-btn" id="timerStartBtn" onclick="toggleTimer()">开始</button>
+                                <button class="timer-btn timer-reset-btn" onclick="resetTimer()">重置</button>
+                            </div>
+                            <div class="timer-status" id="timerStatus">选择时间开始专注</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== 灵感记录页 ====== -->
+            <div class="tab-page module-inspiration" id="tab-inspiration">
+                <div class="page-header">
+                    <h2 class="page-title">💡 灵感记录</h2>
+                    <p class="page-subtitle">随时记录，灵光乍现不容错过</p>
+                </div>
+                <div class="input-area">
+                    <textarea id="inspirationInput" class="text-input" enterkeyhint="send" placeholder="写下你的灵感...（第一行作为标题，回车换行写正文；手机回车发送 / 电脑 Shift+回车发送）" rows="3" onkeydown="onInspirationKey(event)"></textarea>
+                    <div class="input-actions">
+                        <button class="btn-primary" onclick="addInspiration()">记录灵感</button>
+                    </div>
+                </div>
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all" onclick="filterInspiration('all')">全部</button>
+                    <button class="filter-btn" data-filter="灵感" onclick="filterInspiration('灵感')">灵感</button>
+                    <button class="filter-btn" data-filter="心得" onclick="filterInspiration('心得')">心得</button>
+                </div>
+                <div class="data-list" id="inspirationList"></div>
+            </div>
+
+            <!-- ====== 每日计划页 ====== -->
+            <div class="tab-page module-plan" id="tab-plan">
+                <div class="page-header">
+                    <h2 class="page-title">📋 每日计划</h2>
+                    <p class="page-subtitle" id="planDateDisplay"></p>
+                </div>
+                <div class="plan-date-picker">
+                    <label for="planDatePicker">📅 计划日期：</label>
+                    <input type="date" id="planDatePicker" onchange="onPlanDateChange()">
+                    <button class="btn-mini" onclick="onPlanDateChange('today')">回到今日</button>
+                    <div class="plan-calendar-pop" id="planCalendar" style="display:none;"></div>
+                </div>
+                <div class="input-area">
+                    <textarea id="planInput" class="text-input" rows="1" enterkeyhint="send" placeholder="添加今日计划..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addPlan()}"></textarea>
+                    <button class="btn-primary" onclick="addPlan()">添加</button>
+                </div>
+                <div class="plan-summary-bar" id="planSummary"></div>
+                <div class="data-list" id="planList"></div>
+                <div class="plan-done-panel" id="planDoneToday" style="display:none;"></div>
+                <div class="plan-future-panel" id="planFuture" style="display:none;"></div>
+                <button class="btn-secondary plan-history-btn" onclick="togglePlanHistory()">📜 历史记录</button>
+                <div class="plan-history-panel" id="planHistory" style="display:none;"></div>
+            </div>
+
+            <!-- ====== 收支记录页 ====== -->
+            <div class="tab-page module-finance" id="tab-finance">
+                <div class="page-header">
+                    <h2 class="page-title">💰 收支记录</h2>
+                    <p class="page-subtitle">每一笔，都心中有数</p>
+                </div>
+                <div class="finance-period-stats">
+                    <div class="period-stat-card" onclick="togglePeriodDetail('week7')">
+                        <span class="stat-label">近7天收入</span>
+                        <span class="stat-value income-color" id="week7Income">￥0</span>
+                        <div class="stat-detail" id="week7Detail" style="display:none;"></div>
+                    </div>
+                    <div class="period-stat-card" onclick="togglePeriodDetail('month30')">
+                        <span class="stat-label">近30天收入</span>
+                        <span class="stat-value income-color" id="month30Income">￥0</span>
+                        <div class="stat-detail" id="month30Detail" style="display:none;"></div>
+                    </div>
+                    <div class="period-stat-card" onclick="togglePeriodDetail('year1')">
+                        <span class="stat-label">近一年收入</span>
+                        <span class="stat-value income-color" id="year1Income">￥0</span>
+                        <div class="stat-detail" id="year1Detail" style="display:none;"></div>
+                    </div>
+                </div>
+                <div class="finance-stats">
+                    <div class="finance-stat-card income">
+                        <span class="stat-label">总收入</span>
+                        <span class="stat-value" id="totalIncome" onclick="toggleIncomeDetail()">￥0</span>
+                        <div class="stat-detail" id="incomeDetail" style="display:none;"></div>
+                    </div>
+                    <div class="finance-stat-card expense">
+                        <span class="stat-label">总支出</span>
+                        <span class="stat-value" id="totalExpense" onclick="toggleExpenseDetail()">￥0</span>
+                        <div class="stat-detail" id="expenseDetail" style="display:none;"></div>
+                    </div>
+                    <div class="finance-stat-card net">
+                        <span class="stat-label">净结余</span>
+                        <span class="stat-value" id="totalNet">￥0</span>
+                    </div>
+                </div>
+                <div class="finance-goal-setting">
+                    <span class="goal-label">🎯 每日收入目标</span>
+                    <input type="number" id="incomeGoalInput" class="goal-input" placeholder="金额" min="0" step="100">
+                    <span class="goal-unit">元</span>
+                    <button class="btn-primary goal-save-btn" onclick="saveIncomeGoal()" aria-label="保存">✓</button>
+                </div>
+                <div class="finance-input-area">
+                    <div class="finance-type-toggle">
+                        <button class="type-btn active" id="typeIncomeBtn" onclick="setFinanceType('income')">收入</button>
+                        <button class="type-btn" id="typeExpenseBtn" onclick="setFinanceType('expense')">支出</button>
+                    </div>
+                    <input type="number" id="financeAmount" class="text-input" placeholder="金额" min="0" step="0.01">
+                    <div id="financeCategoryChips" class="cat-chips"></div>
+                    <input type="text" id="financeNewCat" class="text-input cat-add-input" placeholder="输入新分类，回车确认" style="display:none" onkeydown="if(event.key==='Enter')confirmAddCategory()">
+                    <button class="btn-primary" onclick="addFinance()">记录</button>
+                </div>
+                <h3 class="section-title">今日记录</h3>
+                <div class="data-list" id="financeTodayList"></div>
+                <h3 class="section-title clickable" id="historyTitle" onclick="toggleHistory()">📅 收支日历 ▾</h3>
+                <div class="data-list history-list" id="financeHistoryList"></div>
+            </div>
+
+            <!-- ====== 年度战略页 ====== -->
+            <div class="tab-page module-strategy" id="tab-strategy">
+                <div class="page-header">
+                    <h2 class="page-title">🎯 年度战略</h2>
+                    <p class="page-subtitle">方向对了，路才不会白走</p>
+                </div>
+                <div class="strategy-container">
+                    <div class="strategy-block annual" data-key="annual">
+                        <div class="strategy-block-header">
+                            <span class="strategy-badge">年度大方向</span>
+                            <div class="strategy-actions">
+                                <button class="btn-toggle-vis" id="vis-annual" onclick="toggleStrategyVis('annual')">👁 显示</button>
+                                <button class="btn-edit" onclick="editStrategy('annual')">编辑</button>
+                            </div>
+                        </div>
+                        <div class="strategy-content annual-font" id="strategyAnnual"></div>
+                    </div>
+                    <div class="strategy-block quarterly" data-key="quarterly">
+                        <div class="strategy-block-header">
+                            <span class="strategy-badge">本季度目标</span>
+                            <div class="strategy-actions">
+                                <button class="btn-toggle-vis" id="vis-quarterly" onclick="toggleStrategyVis('quarterly')">👁 显示</button>
+                                <button class="btn-edit" onclick="editStrategy('quarterly')">编辑</button>
+                            </div>
+                        </div>
+                        <div class="strategy-content quarterly-font" id="strategyQuarterly"></div>
+                    </div>
+                    <div class="strategy-block monthly" data-key="monthly">
+                        <div class="strategy-block-header">
+                            <span class="strategy-badge">本月重点</span>
+                            <div class="strategy-actions">
+                                <button class="btn-toggle-vis" id="vis-monthly" onclick="toggleStrategyVis('monthly')">👁 显示</button>
+                                <button class="btn-edit" onclick="editStrategy('monthly')">编辑</button>
+                            </div>
+                        </div>
+                        <div class="strategy-content monthly-font" id="strategyMonthly"></div>
+                    </div>
+                    <div class="strategy-block shortterm" data-key="shortterm">
+                        <div class="strategy-block-header">
+                            <span class="strategy-badge shortterm-badge">近期短期方向</span>
+                            <div class="strategy-actions">
+                                <button class="btn-toggle-vis" id="vis-shortterm" onclick="toggleStrategyVis('shortterm')">👁 显示</button>
+                                <button class="btn-edit" onclick="editStrategy('shortterm')">编辑</button>
+                            </div>
+                        </div>
+                        <div class="strategy-content shortterm-font" id="strategyShortterm"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== 心得体会页 ====== -->
+            <div class="tab-page module-diary" id="tab-diary">
+                <div class="page-header">
+                    <h2 class="page-title">💭 心得体会</h2>
+                    <p class="page-subtitle">每日三省吾身，积沙成塔</p>
+                </div>
+                <div class="diary-input-area">
+                    <textarea id="diaryInput" class="text-input" placeholder="今天有什么感悟？" rows="4"></textarea>
+                    <div class="input-actions">
+                        <span class="auto-date" id="diaryAutoDate"></span>
+                        <label class="btn-image-upload">
+                            <span>📷 图片</span>
+                            <input type="file" accept="image/*" id="diaryImageInput" onchange="handleDiaryImage(event)" style="display:none">
+                        </label>
+                        <button class="btn-primary" onclick="addDiary()">记录心得</button>
+                    </div>
+                    <div class="image-preview-area" id="diaryImagePreview" style="display:none;"></div>
+                </div>
+                <div class="diary-view-toggle">
+                    <button class="view-btn active" data-view="day" onclick="switchDiaryView('day')">每日</button>
+                    <button class="view-btn" data-view="week" onclick="switchDiaryView('week')">本周</button>
+                    <button class="view-btn" data-view="month" onclick="switchDiaryView('month')">本月</button>
+                    <button class="view-btn" data-view="year" onclick="switchDiaryView('year')">全年</button>
+                </div>
+                <div class="diary-export-bar"><button class="btn-secondary" onclick="exportDiaryImage()">📷 导出为图片</button></div>
+                <div class="data-list" id="diaryList"></div>
+            </div>
+
+            <!-- ====== 心愿栏页 ====== -->
+            <div class="tab-page module-wish" id="tab-wish">
+                <div class="page-header">
+                    <h2 class="page-title">⭐ 心愿栏</h2>
+                    <p class="page-subtitle">让收入目标，点亮每一个心愿</p>
+                </div>
+                <div class="wish-input-area">
+                    <textarea id="wishInput" class="text-input" rows="1" enterkeyhint="send" placeholder="写下你的心愿..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addWish()}"></textarea>
+                    <input type="number" id="wishTargetInput" class="text-input" placeholder="目标金额(元)" min="0" style="max-width:140px">
+                    <button class="btn-primary" onclick="addWish()">添加心愿</button>
+                </div>
+                <div class="annual-income-info" id="annualIncomeInfo"></div>
+                <div class="wish-list" id="wishList"></div>
+            </div>
+
+            <!-- ====== 创作灵感推荐页 ====== -->
+            <div class="tab-page module-recommend" id="tab-recommend">
+                <div class="page-header">
+                    <h2 class="page-title">🔥 创作灵感</h2>
+                    <p class="page-subtitle">热点新闻 · 紧跟时事热点</p>
+                </div>
+                <div class="recommend-list" id="recommendList"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 同步设置弹窗 -->
+    <div class="modal-overlay" id="syncModal" onclick="if(event.target===this)closeSyncModal()">
+        <div class="modal-content sync-modal-content">
+            <h2 class="modal-title">🔄 云端同步</h2>
+            <div class="sync-status" id="syncStatus"></div>
+
+            <!-- 未连接时显示 -->
+            <div class="sync-section">
+                <h3>① 创建云存档</h3>
+                <p class="sync-desc">在本设备创建云端存档空间，获取同步码后在其他设备输入即可</p>
+                <button class="btn-primary" onclick="SyncManager.createSync()">创建云存档</button>
+            </div>
+            <div class="sync-section">
+                <h3>② 连接云存档</h3>
+                <p class="sync-desc">输入其他设备上的同步码，连接到同一个云存档空间</p>
+                <textarea id="syncCodeInput" class="text-input" rows="1" enterkeyhint="send" placeholder="输入同步码..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();SyncManager.connectSync()}"></textarea>
+                <button class="btn-primary" onclick="SyncManager.connectSync()">连接</button>
+            </div>
+
+            <!-- 已连接时显示 -->
+            <div class="sync-section" id="syncConnectedSection" style="display:none;">
+                <h3>云存档管理</h3>
+                <div class="sync-code-display" id="syncCodeDisplay"></div>
+                <button class="btn-secondary" onclick="SyncManager.copySyncCode()">📋 复制同步码</button>
+                <button class="btn-secondary" onclick="SyncManager.testConnection()">🔌 测试连接</button>
+
+                <div style="margin:12px 0; padding:10px; background:var(--bg); border-radius:10px; text-align:center;">
+                    <div style="font-size:0.78rem; color:var(--text-muted);" id="syncLastTime">尚未同步</div>
+                    <div style="font-size:0.68rem; color:var(--text-muted); margin-top:4px;">版本 v20260801ar</div>
+                </div>
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn-primary" style="flex:1; min-width:130px;" onclick="SyncManager.uploadToCloud()">📤 上传到云端</button>
+                    <button class="btn-primary" style="flex:1; min-width:130px; background:var(--accent);" onclick="SyncManager.downloadFromCloud()">📥 从云端下载</button>
+                </div>
+                <p class="sync-desc" style="margin-top:6px; font-size:0.72rem;">上传=本设备数据覆盖云端 | 下载=云端数据完全覆盖本设备</p>
+
+                <button class="btn-secondary" style="width:100%; margin-top:8px;" onclick="SyncManager.manualSync()">🔄 双向智能同步</button>
+                <button class="btn-danger" style="width:100%; margin-top:8px;" onclick="SyncManager.disconnect()">断开同步</button>
+            </div>
+            <button class="btn-secondary" onclick="closeSyncModal()">关闭</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal-content" id="modalContent"></div></div>
+    <div class="modal-overlay" id="confirmOverlay" onclick="if(event.target===this)closeConfirm()">
+        <div class="confirm-box">
+            <div class="confirm-title" id="confirmTitle">确认</div>
+            <div class="confirm-msg" id="confirmMsg"></div>
+            <div class="confirm-actions">
+                <button class="btn-secondary" onclick="closeConfirm()">取消</button>
+                <button class="btn-danger" id="confirmOkBtn" onclick="execConfirm()">删除</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script src="js/data.js?v=20260801ar"></script>
+    <script src="js/trending.js?v=20260801ar"></script>
+    <script src="js/recommendations.js?v=20260801ar"></script>
+    <script src="js/app.js?v=20260801ar"></script>
+</body>
+</html>
