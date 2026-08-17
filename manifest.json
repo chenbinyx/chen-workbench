@@ -1,0 +1,22 @@
+{
+  "name": "陈老师工作台",
+  "short_name": "陈老师工作台",
+  "description": "陈老师专属工作台 - 灵感记录、计划管理、收支统计、灵猴养成、创作灵感",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F5F9F0",
+  "theme_color": "#4A7C59",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
